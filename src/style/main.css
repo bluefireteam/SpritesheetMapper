@@ -1,0 +1,60 @@
+body {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+.main {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+}
+
+.main-containers {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
+
+.topbar-container {
+  flex: auto;
+  height: 50px;
+  background-color: #0000ff;
+}
+
+.editor-container {
+  flex: auto;
+  border: 1px solid #000;
+}
+
+.animation-bar-container {
+  width: 250px;
+  border: 1px solid #000;
+}
+
+.sidebar-container {
+  width: 350px;
+  border: 1px solid #000;
+}
+
+.sidebar {
+  overflow: auto;
+  height: 100%;
+}
+
+.sidebar canvas {
+  cursor: default; 
+}
+
+.animator {
+  background-color: #858585;
+  height: 100%;
+}
+
+.animation-item {
+  cursor: pointer;
+}
+
+.animation-item.selected {
+  color: #0000FF;
+}
