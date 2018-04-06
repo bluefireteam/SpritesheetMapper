@@ -1,7 +1,6 @@
 const h = require("hdotjs");
 module.exports = (state, onAction, emit) => {
-  const { currentProject } = state;
-  const { tileset }  = currentProject;
+  let { tileset }  = state.currentProject;
 
   let selectedTile = { x: 0, y: 0 };
   
@@ -30,11 +29,12 @@ module.exports = (state, onAction, emit) => {
   };
   
   const tilesetBoard = () => {
-    const div = h("div", { content: "Loading" });
+    const div = h("div", { content: "No tileset selected" });
 
-    const size = tileset.size * state.zoom;
     const image = new Image();
     image.onload = () => {
+      const size = tileset.size * state.zoom;
+
       const canvas = h("canvas", { attrs: {
         width: image.width * state.zoom,
         height: image.height * state.zoom
@@ -67,8 +67,22 @@ module.exports = (state, onAction, emit) => {
         emit("TILE_SELECTED", selectedTile);
       });
     };
-    image.src = `file://${tileset.path}`;
-  
+
+    const load = () => {
+      image.src = `file://${tileset.path}`;
+    };
+
+    if (tileset) {
+      load();
+    }
+
+    onAction(action => {
+      if (action == "PROJECT_SELECTED") {
+        tileset = state.currentProject.tileset;
+        load();
+      }
+    });
+
     return div;
   };
 

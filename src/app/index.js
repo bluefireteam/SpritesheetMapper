@@ -10,20 +10,7 @@ const state = {
   selectedAnimation: "torch",
   zoom: 3,
   currentProject: {
-    tileset: {
-      path: "/home/erick/projetos/gamedev/tales/assets/tileset/tileset.png",
-      size: 16
-    },
-    animations: {
-      torch: {
-        x: 3,
-        y: 3,
-        w: 1,
-        h: 2,
-        length: 4,
-        millis: 500
-      }
-    }
+    animations: []
   }
 };
 const onActions = [];

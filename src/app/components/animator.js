@@ -1,22 +1,18 @@
 const h = require("hdotjs");
 
 module.exports = (state, onAction) => {
+  const tileset = () => state.currentProject.tileset;
+  const getAnimation = () => state.currentProject.animations[state.selectedAnimation];
 
-  const { currentProject } = state;
-  const { tileset } = currentProject;
-
-  let animation, frame = 0, playing = false;
-
-  if (state.selectedAnimation) {
-    animation = currentProject.animations[state.selectedAnimation];
-  }
+  let frame = 0, playing = false;
 
   const canvas = h("canvas");
 
   const image = new Image();
   const render = () => {
+    const animation = getAnimation();
     if (animation) {
-      const size = tileset.size * state.zoom;
+      const size = tileset().size * state.zoom;
 
       canvas.width = animation.w * size;
       canvas.height = animation.h * size;
@@ -25,10 +21,10 @@ module.exports = (state, onAction) => {
       ctx.imageSmoothingEnabled = false;
       ctx.drawImage(
         image,
-        (animation.x + frame) * tileset.size,
-        animation.y * tileset.size,
-        animation.w * tileset.size,
-        animation.h * tileset.size,
+        (animation.x + (frame * animation.w)) * tileset().size,
+        animation.y * tileset().size,
+        animation.w * tileset().size,
+        animation.h * tileset().size,
         0,
         0,
         animation.w * size,
@@ -36,10 +32,18 @@ module.exports = (state, onAction) => {
       );
     }
   };
-  image.onload = render;
-  image.src = `file://${tileset.path}`;
+
+  const load = () => {
+    image.src = `file://${tileset().path}`;
+  };
+
+  if (tileset()) {
+    image.onload = render;
+    load();
+  }
 
   const play = () => {
+    const animation = getAnimation();
     if (playing) {
       frame++;
       if (frame === animation.length) {
@@ -50,48 +54,46 @@ module.exports = (state, onAction) => {
     }
   };
 
-  const form = () => {
+  const updateAnimation = (input, fieldName) =>
+    getAnimation()[fieldName] = parseInt(input.value, 10);
 
-    const updateAnimation = (input, fieldName) =>
-      animation[fieldName] = parseInt(input.value, 10);
-
-    const lengthInput = h("input", {
-      attrs: { type: "number", value: animation.length },
-      listeners: {
-        blur: () => updateAnimation(lengthInput, "length"),
-        keypress: ({ which }) => {
-          if (which === 13) {
-            updateAnimation(lengthInput, "length");
-          }
+  const lengthInput = h("input", {
+    attrs: { type: "number", value: getAnimation() ? getAnimation().length : 0 },
+    listeners: {
+      blur: () => updateAnimation(lengthInput, "length"),
+      keypress: ({ which }) => {
+        if (which === 13) {
+          updateAnimation(lengthInput, "length");
         }
       }
-    });
+    }
+  });
 
-    const millisInput = h("input", {
-      attrs: { type: "number", value: animation.millis },
-      listeners: {
-        blur: () => updateAnimation(millisInput, "millis"),
-        keypress: ({ which }) => {
-          if (which === 13) {
-            updateAnimation(millisInput, "millis");
-          }
+  const millisInput = h("input", {
+    attrs: { type: "number", value: getAnimation() ? getAnimation().millis : 0 },
+    listeners: {
+      blur: () => updateAnimation(millisInput, "millis"),
+      keypress: ({ which }) => {
+        if (which === 13) {
+          updateAnimation(millisInput, "millis");
         }
       }
-    });
+    }
+  });
 
-    return h("form", { children: [
-      h("div", { children: [
-        h("label", { content: "Length" }),
-        lengthInput
-      ]}),
-      h("div", { children: [
-        h("label", { content: "Frame time (millis)" }),
-        millisInput
-      ]})
-    ]});
-  };
+  const form = h("form", { children: [
+    h("div", { children: [
+      h("label", { content: "Length" }),
+      lengthInput
+    ]}),
+    h("div", { children: [
+      h("label", { content: "Frame time (millis)" }),
+      millisInput
+    ]})
+  ]});
 
   onAction((action, payload) => {
+    const animation = getAnimation();
     if (action == "TILE_SELECTED") {
       Object.assign(animation, payload);
       render();
@@ -102,11 +104,19 @@ module.exports = (state, onAction) => {
       playing = false;
       frame = 0;
       render();
+    } else if (action == "SELECTED_ANIMATION") {
+      const animation = getAnimation();
+
+      lengthInput.value = animation.length;
+      millisInput.value = animation.millis;
+      render();
+    } else if (action == "PROJECT_SELECTED") {
+      load();
     }
   });
 
   return h("div", { attrs: { class: "animator" }, children: [
     canvas,
-    form()
+    form
   ] });
 };

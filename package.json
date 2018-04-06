@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/erickzanardo/tileset-animator#readme",
   "dependencies": {
+    "dialogs": "^1.1.20",
     "hdotjs": "^1.0.0",
     "ramda": "^0.25.0"
   },
