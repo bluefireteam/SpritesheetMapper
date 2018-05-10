@@ -45,6 +45,8 @@ module.exports = (state, onAction, emit) => {
         state.currentProject.animations[name] = {
           x: 0, y: 0, w: 0, h: 0, length: 0, millis: 0
         };
+        state.selectedAnimation = name;
+
         emit("NEW_ANIMATION", name);
         emit("SELECTED_ANIMATION", name);
       });

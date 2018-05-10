@@ -4,7 +4,7 @@
   "description": "Simple application to help create animations using tileset images",
   "main": "src/main.js",
   "scripts": {
-    "start": "NODE_ENV=dev electron .",
+    "start": "(NODE_ENV=dev electron . &)",
     "lint": "eslint src"
   },
   "repository": {

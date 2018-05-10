@@ -1,8 +1,6 @@
 const h = require("hdotjs");
 
 module.exports = (state, onAction, emit) => {
-  let { selectedAnimation } = state;
-
   const selectAnimation = animation => {
     state.selectedAnimation = animation;
     emit("STOP");
@@ -11,7 +9,7 @@ module.exports = (state, onAction, emit) => {
 
   const renderAnimation = animation =>
     h("div", {
-      attrs: { class: `animation-item${selectedAnimation === animation ? " selected": ""}` },
+      attrs: { class: `animation-item${state.selectedAnimation === animation ? " selected": ""}` },
       content: animation,
       listeners: {
         click: function() {

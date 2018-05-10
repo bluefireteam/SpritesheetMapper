@@ -105,8 +105,6 @@ module.exports = (state, onAction) => {
       frame = 0;
       render();
     } else if (action == "SELECTED_ANIMATION") {
-      const animation = getAnimation();
-
       lengthInput.value = animation.length;
       millisInput.value = animation.millis;
       render();
