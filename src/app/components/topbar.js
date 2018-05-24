@@ -28,7 +28,7 @@ module.exports = (state, onAction, emit) => {
       if (state.projectPath) {
         fs.writeFileSync(
           state.projectPath,
-          JSON.stringify(state.currentProject)
+          JSON.stringify(state.currentProject, null, 2)
         );
         alert("Project saved!");
       } else {
