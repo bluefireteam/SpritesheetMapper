@@ -50,32 +50,57 @@ module.exports = (state, onAction) => {
         frame = 0;
       }
       render();
-      setTimeout(play, animation.millis);
+
+      const millis = Array.isArray(animation.millis)
+        ? animation.millis[frame]
+        : animation.millis;
+
+      setTimeout(play, millis);
     }
   };
 
-  const updateAnimation = (input, fieldName) =>
-    getAnimation()[fieldName] = parseInt(input.value, 10);
+  const updateLength = value =>
+    getAnimation().length = parseInt(value, 10);
 
   const lengthInput = h("input", {
     attrs: { type: "number", value: getAnimation() ? getAnimation().length : 0 },
     listeners: {
-      blur: () => updateAnimation(lengthInput, "length"),
+      blur: () => updateLength(lengthInput.value),
       keypress: ({ which }) => {
         if (which === 13) {
-          updateAnimation(lengthInput, "length");
+          updateLength(lengthInput.value);
         }
       }
     }
   });
 
+  const updateMillis = input => {
+    const value = input.value;
+
+    input.style.borderColor = "";
+
+    if (/^\d+$/.test(value)) {
+      getAnimation().millis = parseInt(value, 10);
+    } else if (/^(( )?\d( )?(,)?)+$/.test(value)) {
+      const values =
+        value.split(",")
+          .map(value => value.replace(/ /g, ""))
+          .filter(value => value !== "")
+          .map(value => parseInt(value, 10));
+
+      getAnimation().millis = values;
+    } else {
+      input.style.borderColor = "#ff0000";
+    }
+  };
+
   const millisInput = h("input", {
-    attrs: { type: "number", value: getAnimation() ? getAnimation().millis : 0 },
+    attrs: { type: "input", value: getAnimation() ? getAnimation().millis : 0 },
     listeners: {
-      blur: () => updateAnimation(millisInput, "millis"),
+      blur: () => updateMillis(millisInput),
       keypress: ({ which }) => {
         if (which === 13) {
-          updateAnimation(millisInput, "millis");
+          updateMillis(millisInput);
         }
       }
     }
@@ -106,7 +131,9 @@ module.exports = (state, onAction) => {
       render();
     } else if (action == "SELECTED_ANIMATION") {
       lengthInput.value = animation.length;
-      millisInput.value = animation.millis;
+      const value = Array.isArray(animation.millis) ? animation.millis.join(",") : animation.millis;
+
+      millisInput.value = value;
       render();
     } else if (action == "PROJECT_SELECTED") {
       load();
