@@ -24,7 +24,7 @@
     "ramda": "^0.25.0"
   },
   "devDependencies": {
-    "electron": "^1.8.8",
+    "electron": "^3.0.12",
     "eslint": "^4.18.2"
   }
 }
