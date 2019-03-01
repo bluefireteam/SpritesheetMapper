@@ -28,7 +28,7 @@ module.exports = (state, onAction, emit) => {
       list.appendChild(renderAnimation(payload));
     } else if (action === "SELECTED_ANIMATION") {
       document.querySelector(".animation-item.selected").classList.remove("selected");
-      
+
       document.querySelectorAll(".animation-item").forEach(el => {
         if (el.innerText === payload) {
           el.classList.add("selected");
@@ -38,7 +38,7 @@ module.exports = (state, onAction, emit) => {
       const animations = Object.keys(state.currentProject.animations);
 
       if (animations.length) {
-        animations 
+        animations
           .map(renderAnimation)
           .forEach(animation => list.appendChild(animation));
 

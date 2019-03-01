@@ -5,6 +5,26 @@ const h = require("hdotjs");
 
 module.exports = (state, onAction, emit) => {
 
+  const newProject = h("button", {
+    content: "Create project",
+    attrs: { type: "button" },
+    listeners: { click: () => {
+      dialog.showSaveDialog((fileName) => {
+        const project = {
+          tileset: null,
+          animations: {},
+        };
+
+        fs.writeFileSync(fileName, JSON.stringify(project), "utf8");
+
+        state.projectPath = fileName;
+        state.currentProject = project;
+
+        emit("PROJECT_SELECTED");
+      });
+    }}
+  });
+
   const openProject = h("button", {
     content: "Open project",
     attrs: { type: "button" },
@@ -80,6 +100,7 @@ module.exports = (state, onAction, emit) => {
   });
 
   return h("div", { children: [
+    newProject,
     openProject,
     saveProject,
     h("span", { content: "|" }),

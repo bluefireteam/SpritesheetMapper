@@ -135,7 +135,7 @@ module.exports = (state, onAction) => {
 
       millisInput.value = value;
       render();
-    } else if (action == "PROJECT_SELECTED") {
+    } else if ((action == "TILESET_CHANGED" || action == "PROJECT_SELECTED") && tileset()) {
       load();
     }
   });

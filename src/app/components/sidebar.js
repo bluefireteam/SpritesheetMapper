@@ -1,6 +1,12 @@
+const dialogs = require("dialogs")();
+const { dialog } = require("electron").remote;
+
 const h = require("hdotjs");
 module.exports = (state, onAction, emit) => {
-  let { tileset }  = state.currentProject;
+  const tileset = () => state.currentProject.tileset;
+  const updateTileset = tileset => {
+    state.currentProject.tileset = tileset;
+  };
 
   let selectedTile = { x: 0, y: 0 };
 
@@ -29,11 +35,40 @@ module.exports = (state, onAction, emit) => {
   };
 
   const tilesetBoard = () => {
-    const div = h("div", { content: "No tileset selected" });
+    const div = h("div", {
+      children: [
+        h("span", { content: "No tileset selected" }),
+        h("button", {
+          content: "Select tileset",
+          attrs: { type: "button" },
+          listeners: {
+            click: () => {
+              dialog.showOpenDialog(([ fileName ]) => {
+                dialogs.prompt("Tile size", "", sizeString => {
+                  const size = parseInt(sizeString, 10);
+
+                  if (isNaN(size)) {
+                    return dialogs.alert("Tile size is not a valid number");
+                  }
+
+                  updateTileset({
+                    path: fileName,
+                    size,
+                  });
+
+                  load();
+                  emit("TILESET_CHANGED");
+                });
+              });
+            }
+          }
+        })
+      ]
+    });
 
     const image = new Image();
     image.onload = () => {
-      const size = tileset.size * state.zoom;
+      const size = tileset().size * state.zoom;
 
       const canvas = h("canvas", { attrs: {
         width: image.width * state.zoom,
@@ -69,16 +104,15 @@ module.exports = (state, onAction, emit) => {
     };
 
     const load = () => {
-      image.src = `file://${tileset.path}`;
+      image.src = `file://${tileset().path}`;
     };
 
-    if (tileset) {
+    if (tileset()) {
       load();
     }
 
     onAction(action => {
-      if (action == "PROJECT_SELECTED") {
-        tileset = state.currentProject.tileset;
+      if (action == "PROJECT_SELECTED" && tileset()) {
         load();
       }
     });
