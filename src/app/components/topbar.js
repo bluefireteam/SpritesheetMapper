@@ -25,6 +25,14 @@ module.exports = (state, onAction, emit) => {
     }}
   });
 
+  const closeProject = h("button", {
+    content: "Close project",
+    attrs: { type: "button" },
+    listeners: { click: () => {
+      location.reload();
+    }}
+  });
+
   const openProject = h("button", {
     content: "Open project",
     attrs: { type: "button" },
@@ -101,6 +109,7 @@ module.exports = (state, onAction, emit) => {
 
   return h("div", { children: [
     newProject,
+    closeProject,
     openProject,
     saveProject,
     h("span", { content: "|" }),

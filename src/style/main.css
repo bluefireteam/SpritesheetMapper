@@ -1,3 +1,24 @@
+* {
+  color: #fff;
+}
+
+input {
+  color: #111;
+}
+
+button {
+  background-color: #888;
+  color: #111;
+  border: 0;
+  margin: 5px;
+  padding: 5px;
+}
+
+body {
+  font-family: verdana;
+  background-color: #000;
+}
+
 .main {
   display: flex;
   height: 100%;
@@ -42,6 +63,21 @@
 .animator {
   background-color: #858585;
   height: 100%;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+.animator canvas {
+  margin-bottom: 25px;
+}
+
+.animator input {
+  margin-bottom: 15px;
+  margin-left: 5px;
 }
 
 .animation-item {
@@ -49,5 +85,5 @@
 }
 
 .animation-item.selected {
-  color: #0000FF;
+  color: #999;
 }

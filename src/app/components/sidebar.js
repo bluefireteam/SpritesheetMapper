@@ -36,6 +36,10 @@ module.exports = (state, onAction, emit) => {
 
   const tilesetBoard = () => {
     const div = h("div", {
+      attrs: {
+        id: "sidebar",
+        style: "display: none;",
+      },
       children: [
         h("span", { content: "No tileset selected" }),
         h("button", {
@@ -104,6 +108,7 @@ module.exports = (state, onAction, emit) => {
     };
 
     const load = () => {
+      document.getElementById("sidebar").style.display = "block";
       image.src = `file://${tileset().path}`;
     };
 

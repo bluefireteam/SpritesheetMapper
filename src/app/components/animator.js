@@ -34,6 +34,8 @@ module.exports = (state, onAction) => {
   };
 
   const load = () => {
+    document.getElementById("animator").style.display = "block";
+    image.onload = render;
     image.src = `file://${tileset().path}`;
   };
 
@@ -107,13 +109,15 @@ module.exports = (state, onAction) => {
   });
 
   const form = h("form", { children: [
-    h("div", { children: [
-      h("label", { content: "Length" }),
-      lengthInput
-    ]}),
-    h("div", { children: [
-      h("label", { content: "Frame time (millis)" }),
-      millisInput
+    h("div", { attrs: { id: "animator", style: "display: none;" }, children: [
+      h("div", { children: [
+        h("label", { content: "Length" }),
+        lengthInput
+      ]}),
+      h("div", { children: [
+        h("label", { content: "Frame time (millis)" }),
+        millisInput
+      ]})
     ]})
   ]});
 
