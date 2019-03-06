@@ -87,3 +87,11 @@ body {
 .animation-item.selected {
   color: #999;
 }
+
+.dialog-widget .title {
+  color: #000;
+}
+
+body .dialog-widget .ok, .dialog-widget .cancel {
+  width: calc(50% - 20px);
+}

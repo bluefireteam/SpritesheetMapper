@@ -108,7 +108,6 @@ module.exports = (state, onAction, emit) => {
     };
 
     const load = () => {
-      document.getElementById("sidebar").style.display = "block";
       image.src = `file://${tileset().path}`;
     };
 
@@ -119,6 +118,8 @@ module.exports = (state, onAction, emit) => {
     onAction(action => {
       if (action == "PROJECT_SELECTED" && tileset()) {
         load();
+      } else if (action == "PROJECT_SELECTED") {
+        document.getElementById("sidebar").style.display = "block";
       }
     });
 
