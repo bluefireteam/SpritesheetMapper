@@ -118,6 +118,7 @@ module.exports = (state, onAction, emit) => {
     onAction(action => {
       if (action == "PROJECT_SELECTED" && tileset()) {
         load();
+        document.getElementById("sidebar").style.display = "block";
       } else if (action == "PROJECT_SELECTED") {
         document.getElementById("sidebar").style.display = "block";
       }
