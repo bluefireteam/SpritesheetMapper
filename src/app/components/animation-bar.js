@@ -38,6 +38,7 @@ module.exports = (state, onAction, emit) => {
       const animations = Object.keys(state.currentProject.animations);
 
       if (animations.length) {
+        list.innerHTML = "";
         animations
           .map(renderAnimation)
           .forEach(animation => list.appendChild(animation));
