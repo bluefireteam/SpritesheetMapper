@@ -20,6 +20,7 @@ module.exports = (state, onAction, emit) => {
         state.projectPath = fileName;
         state.currentProject = project;
 
+        onSelectProject();
         emit("PROJECT_SELECTED");
       });
     }}
@@ -27,7 +28,7 @@ module.exports = (state, onAction, emit) => {
 
   const closeProject = h("button", {
     content: "Close project",
-    attrs: { type: "button" },
+    attrs: { type: "button", style: "display: none"  },
     listeners: { click: () => {
       location.reload();
     }}
@@ -44,6 +45,7 @@ module.exports = (state, onAction, emit) => {
         state.projectPath = fileName;
         state.currentProject = project;
 
+        onSelectProject();
         emit("PROJECT_SELECTED");
       });
     }}
@@ -51,7 +53,7 @@ module.exports = (state, onAction, emit) => {
 
   const saveProject = h("button", {
     content: "Save project",
-    attrs: { type: "button" },
+    attrs: { type: "button", style: "display: none"  },
     listeners: { click: () => {
       if (state.projectPath) {
         fs.writeFileSync(
@@ -67,7 +69,7 @@ module.exports = (state, onAction, emit) => {
 
   const addAnimation = h("button", {
     content: "Add Animation",
-    attrs: { type: "button" },
+    attrs: { type: "button", style: "display: none"  },
     listeners: { click: () => {
       dialogs.prompt("Animation name:", "", name => {
         state.currentProject.animations[name] = {
@@ -83,7 +85,7 @@ module.exports = (state, onAction, emit) => {
 
   const stopButton = h("button", {
     content: "Stop",
-    attrs: { type: "button", disabled: true },
+    attrs: { type: "button", disabled: true, style: "display: none"  },
     listeners: { click: () => {
       emit("STOP");
     }}
@@ -91,7 +93,7 @@ module.exports = (state, onAction, emit) => {
 
   const playButton = h("button", {
     content: "Play",
-    attrs: { type: "button" },
+    attrs: { type: "button", style: "display: none" },
     listeners: { click: () => {
       emit("PLAY");
     }}
@@ -106,6 +108,17 @@ module.exports = (state, onAction, emit) => {
       playButton.disabled = false;
     }
   });
+
+  const onSelectProject = () => {
+    addAnimation.style.display = "inline";
+    saveProject.style.display = "inline";
+    closeProject.style.display = "inline";
+    playButton.style.display = "inline";
+    stopButton.style.display = "inline";
+
+    openProject.style.display = "none";
+    newProject.style.display = "none";
+  };
 
   return h("div", { children: [
     newProject,
