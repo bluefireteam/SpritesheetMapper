@@ -5,7 +5,11 @@ const url = require("url");
 let win;
 
 const createWindow = () => {
-  win = new BrowserWindow({width: 800, height: 600});
+  win = new BrowserWindow({
+    width: 800,
+    height: 600,
+    icon: path.join(__dirname, "assets/icons/png/64x64.png")
+  });
 
   win.loadURL(url.format({
     pathname: path.join(__dirname, "index.html"),
