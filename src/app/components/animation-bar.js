@@ -27,7 +27,10 @@ module.exports = (state, onAction, emit) => {
     if (action === "NEW_ANIMATION") {
       list.appendChild(renderAnimation(payload));
     } else if (action === "SELECTED_ANIMATION") {
-      document.querySelector(".animation-item.selected").classList.remove("selected");
+      const selected = document.querySelector(".animation-item.selected");
+      if (selected) {
+        selected.classList.remove("selected");
+      }
 
       document.querySelectorAll(".animation-item").forEach(el => {
         if (el.innerText === payload) {
